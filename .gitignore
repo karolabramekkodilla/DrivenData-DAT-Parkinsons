@@ -22,3 +22,13 @@ Thumbs.db
 
 # Environment variables
 .env
+
+# Data
+data/
+
+# Trained models
+models/
+
+# Output
+outputs/
+submissions/
