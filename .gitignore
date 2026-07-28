@@ -27,8 +27,8 @@ Thumbs.db
 data/
 
 # Trained models
-models/
+src/models/
 
 # Output
-outputs/
+src/outputs/
 submissions/
