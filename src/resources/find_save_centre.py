@@ -1,8 +1,8 @@
 from pathlib import Path
 
 import pandas as pd
-
-from resources.cut_off_black_segments import cut_off_black_segments
+import nibabel as nib
+import numpy as np
 from resources.find_x import calculate_x_profile, find_x_area_center_split
 from resources.find_y import calculate_y_profile, find_y_argmax
 from resources.find_z import calculate_z_profile, find_z_argmax
@@ -37,25 +37,26 @@ def create_centres_csv(
             continue
 
         print(f"{index + 1}/{len(labels)}: {uid}")
-
-        cropped, img = cut_off_black_segments(
-            path=file_path,
-            threshold=0,
-            margin=1,
-        )
+        img = nib.load(filename=file_path)
+        volume = img.get_fdata(dtype=np.float32)
+        # cropped, img = cut_off_black_segments(
+        #     path=file_path,
+        #     threshold=0,
+        #     margin=1,
+        # )
 
         x_profile = calculate_x_profile(
-            cropped,
+            volume,
             filter_width=filter_width,
         )
 
         y_profile = calculate_y_profile(
-            cropped,
+            volume,
             filter_width=filter_width,
         )
 
         z_profile = calculate_z_profile(
-            cropped,
+            volume,
             filter_width=filter_width,
         )
 

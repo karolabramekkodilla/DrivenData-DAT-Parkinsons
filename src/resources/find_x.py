@@ -53,8 +53,8 @@ def find_x_area_center_split(
         x_profile,
         filter_width=3,
         smooth_window=9,
-        edge_margin_ratio=0.10,
-        local_search_ratio=0.20
+        edge_margin_ratio=0.15,
+        local_search_ratio=0.10
 ):
     x_profile = np.asarray(x_profile, dtype=float)
     smoothed = smooth_1d(x_profile, window_size=smooth_window)
