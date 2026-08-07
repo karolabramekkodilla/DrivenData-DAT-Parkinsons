@@ -2,26 +2,20 @@
 import nibabel as nib
 import numpy as np
 from resources.find_x import find_x_area_center_split,calculate_x_profile, find_x_area_center
-from resources.find_y import find_y_argmax,calculate_y_profile
-from resources.find_z import find_z_argmax,calculate_z_profile
+from resources.find_y import find_y_argmax, calculate_y_profile, find_y_area_center
+from resources.find_z import find_z_argmax,calculate_z_profile, find_z_area_center
 
 
 def cut_off_edges(
     image: nib.Nifti1Image,
+    x_left: int = 40,
+    x_right: int = 40,
+    y_front: int = 50,
+    y_back: int = 50,
+    z_down: int = 40,
+    z_up: int = 40,
+    target_voxel_size: float = 2.46,
 ) -> nib.Nifti1Image:
-
-    TARGET_VOXEL_SIZE = 2.46
-
-    # Docelowy obszar fizyczny zapisany jako liczba voxeli
-    # po późniejszej normalizacji do 2.46 mm.
-    X_LEFT = 35
-    X_RIGHT = 35
-
-    Y_FRONT = 50
-    Y_BACK = 50
-
-    Z_DOWN = 40
-    Z_UP = 40
 
     x_voxel_size, y_voxel_size, z_voxel_size = (
         image.header.get_zooms()[:3]
@@ -30,24 +24,24 @@ def cut_off_edges(
     # Liczba voxeli potrzebna w obrazie źródłowym,
     # aby objąć ten sam zakres w milimetrach.
     x_left_source = round(
-        X_LEFT * TARGET_VOXEL_SIZE / x_voxel_size
+        x_left * target_voxel_size / x_voxel_size
     )
     x_right_source = round(
-        X_RIGHT * TARGET_VOXEL_SIZE / x_voxel_size
+        x_right * target_voxel_size / x_voxel_size
     )
 
     y_front_source = round(
-        Y_FRONT * TARGET_VOXEL_SIZE / y_voxel_size
+        y_front * target_voxel_size / y_voxel_size
     )
     y_back_source = round(
-        Y_BACK * TARGET_VOXEL_SIZE / y_voxel_size
+        y_back * target_voxel_size / y_voxel_size
     )
 
     z_down_source = round(
-        Z_DOWN * TARGET_VOXEL_SIZE / z_voxel_size
+        z_down * target_voxel_size / z_voxel_size
     )
     z_up_source = round(
-        Z_UP * TARGET_VOXEL_SIZE / z_voxel_size
+        z_up * target_voxel_size / z_voxel_size
     )
 
     volume = image.get_fdata(dtype=np.float32)
@@ -59,8 +53,8 @@ def cut_off_edges(
     x_centre = int(find_x_area_center(x_profile))
     # x_centre = int(find_x_area_center_split(x_profile))
 
-    y_centre = int(find_y_argmax(y_profile))
-    z_centre = int(find_z_argmax(z_profile))
+    y_centre = int(find_y_area_center(y_profile))
+    z_centre = int(find_z_area_center(z_profile))
 
     x_left_cut = x_centre - x_left_source
     x_right_cut = x_centre + x_right_source

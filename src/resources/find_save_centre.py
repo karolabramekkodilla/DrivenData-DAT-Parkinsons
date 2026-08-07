@@ -4,8 +4,8 @@ import pandas as pd
 import nibabel as nib
 import numpy as np
 from resources.find_x import calculate_x_profile, find_x_area_center_split
-from resources.find_y import calculate_y_profile, find_y_argmax
-from resources.find_z import calculate_z_profile, find_z_argmax
+from resources.find_y import calculate_y_profile, find_y_argmax, find_y_area_center
+from resources.find_z import calculate_z_profile, find_z_argmax, find_z_area_center
 
 
 def create_centres_csv(
@@ -68,14 +68,14 @@ def create_centres_csv(
             local_search_ratio=0.20,
         )
 
-        y_centre = find_y_argmax(
+        y_centre = find_y_area_center(
             y_profile,
             filter_width=filter_width,
             smooth_window=smooth_window,
             edge_margin_ratio=0.10,
         )
 
-        z_centre = find_z_argmax(
+        z_centre = find_z_area_center(
             z_profile,
             filter_width=filter_width,
             smooth_window=smooth_window,
