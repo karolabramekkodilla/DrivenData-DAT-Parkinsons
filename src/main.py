@@ -1,9 +1,8 @@
 from pathlib import Path
 import nibabel as nib
 from nibabel.processing import resample_to_output
-import pandas as pd
 from resources.cut_off_edges import cut_off_edges
-from resources.find_save_centre import create_centres_csv
+from resources.standarize_image import standardize_image
 
 
 def main():
@@ -29,12 +28,17 @@ def main():
         # Obróbka obrazu; funkcja zwraca obiekt NIfTI
         processed_image = cut_off_edges(image)
         processed_image = cut_off_edges(processed_image,x_left=35,x_right=35,y_front=40,y_back=40,z_down=30,z_up=30)
+        # Standaryzacja obrazu
+        processed_image = standardize_image(processed_image, percent_top=0.02)
+
         last_cut = cut_off_edges(processed_image, x_left=30, x_right=30, y_front=30, y_back=30, z_down=25, z_up=30)
         resampled_image = resample_to_output(
             last_cut,
             voxel_sizes=(2.46, 2.46, 2.46),
             order=1,
         )
+
+
         # Zapis pod tą samą nazwą do outputs
         output_path = outputs_dir / nifti_path.name
         nib.save(resampled_image, output_path)
@@ -43,8 +47,6 @@ def main():
             f"[{index}/{len(nifti_paths)}] "
             f"Zapisano: {output_path.name}"
         )
-
-
 
 if __name__ == "__main__":
     main()
