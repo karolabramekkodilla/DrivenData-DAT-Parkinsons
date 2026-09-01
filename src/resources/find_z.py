@@ -76,3 +76,44 @@ def find_z_area_center(
     z_area_center = z_area_center_start + filter_width // 2
 
     return z_area_center
+
+def calculate_z_profile_hot_spot(
+    volume,
+    center=None,
+    filter_width=3,
+    x_left_scope=0.3,
+    x_right_scope=0.3,
+    y_front_scope=0.3,
+    y_back_scope=0.3,
+    z_up_scope=0.15,
+    z_down_scope=0.15,
+):
+    x_size, y_size, z_size = volume.shape
+
+    if center is None:
+        x_center = x_size // 2
+        y_center = y_size // 2
+        z_center = z_size // 2
+    else:
+        x_center, y_center, z_center = center
+
+    x_min = max(0, int(x_center - x_left_scope * x_size))
+    x_max = min(x_size - filter_width + 1, int(x_center + x_right_scope * x_size))
+
+    y_min = max(0, int(y_center - y_back_scope * y_size))
+    y_max = min(y_size, int(y_center + y_front_scope * y_size))
+
+    z_min = max(0, int(z_center - z_down_scope * z_size))
+    z_max = min(z_size, int(z_center + z_up_scope * z_size))
+
+    profile = np.zeros(z_size - filter_width + 1)
+
+    for z_pos in range(z_min, z_max):
+        area = volume[
+            x_min:x_max,
+            y_min:y_max,
+            z_pos:z_pos + filter_width,
+        ]
+        profile[z_pos] = np.sum(area)
+
+    return profile
