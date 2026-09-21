@@ -3,7 +3,7 @@ import nibabel as nib
 import numpy as np
 from resources.find_x import find_x_area_center_split,calculate_x_profile, find_x_area_center
 from resources.find_y import find_y_argmax, calculate_y_profile, find_y_area_center
-from resources.find_z import find_z_argmax,calculate_z_profile, find_z_area_center
+from resources.find_z import find_z_argmax,calculate_z_profile, find_z_area_center, find_z_center
 
 
 def cut_off_edges(
@@ -15,6 +15,8 @@ def cut_off_edges(
     z_down: int = 40,
     z_up: int = 40,
     target_voxel_size: float = 2.46,
+    z_center_method=find_z_area_center,
+    z_filter_width: int = 3,
 ) -> nib.Nifti1Image:
 
     x_voxel_size, y_voxel_size, z_voxel_size = (
@@ -48,13 +50,23 @@ def cut_off_edges(
 
     x_profile = calculate_x_profile(volume)
     y_profile = calculate_y_profile(volume)
-    z_profile = calculate_z_profile(volume)
 
     x_centre = int(find_x_area_center(x_profile))
     # x_centre = int(find_x_area_center_split(x_profile))
 
     y_centre = int(find_y_area_center(y_profile))
-    z_centre = int(find_z_area_center(z_profile))
+
+    z_profile = calculate_z_profile(
+        volume,
+        filter_width=z_filter_width,
+    )
+
+    z_centre = int(
+        z_center_method(
+            z_profile,
+            filter_width=z_filter_width,
+        )
+    )
 
     x_left_cut = x_centre - x_left_source
     x_right_cut = x_centre + x_right_source

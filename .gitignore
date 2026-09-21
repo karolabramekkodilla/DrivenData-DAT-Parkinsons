@@ -1,34 +1,35 @@
-# Virtual environment
+# Środowisko
 .venv/
 venv/
-
-# PyCharm
-.idea/
-
-# Python
 __pycache__/
-*.py[cod]
-*$py.class
-
-# Jupyter
+*.pyc
 .ipynb_checkpoints/
 
-# System
+# IDE
+.idea/
+.vscode/
+
+# Dane DaTSCAN
+data/
+images/
+train_images/
+test_images/
+*.nii
+*.nii.gz
+
+# Modele i duże wyniki
+*.pth
+*.pt
+*.ckpt
+*.pkl
+*.joblib
+outputs/
+submissions/
+
+# MLflow
+mlruns/
+mlartifacts/
+
+# Pliki systemowe
 .DS_Store
 Thumbs.db
-
-# Logs
-*.log
-
-# Environment variables
-.env
-
-# Data
-data/
-
-# Trained models
-src/models/
-
-# Output
-src/outputs/
-submissions/
