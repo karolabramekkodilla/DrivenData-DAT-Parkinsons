@@ -36,6 +36,8 @@ Thumbs.db
 
 # Dane konkursowe
 code_execution/data_origin/
+code_execution/data/
+code_execution/data100/
 
 # Paczki submissionów
 code_execution/*.zip
