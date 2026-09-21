@@ -38,11 +38,9 @@ Thumbs.db
 code_execution/data_origin/
 code_execution/data/
 code_execution/data100/
+code_execution/*.zip
 src/resources/*.nii.gz
 
-
-# Paczki submissionów
-code_execution/*.zip
 
 # Predykcje wykorzystywane do meta-modelu
 meta_train_predictions*.csv
