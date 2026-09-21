@@ -33,3 +33,12 @@ mlartifacts/
 # Pliki systemowe
 .DS_Store
 Thumbs.db
+
+# Dane konkursowe
+code_execution/data_origin/
+
+# Paczki submissionów
+code_execution/*.zip
+
+# Predykcje wykorzystywane do meta-modelu
+meta_train_predictions*.csv
